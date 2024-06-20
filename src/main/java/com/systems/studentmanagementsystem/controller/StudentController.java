@@ -30,9 +30,27 @@ public class StudentController {
     @PostMapping
     public String saveStudent(@ModelAttribute("student") Student student) {
         studentService.saveStudent(student);
+
         return "redirect:/students";
     }
 
+    @GetMapping("/edit/{studentId}")
+    public String editStudentForm(@PathVariable Long studentId  ,Model model) {
+         model.addAttribute("student", studentService.getStudentById(studentId));
+        return "edit_student";
+    }
 
+    @PostMapping("/{studentId}")
+    public String updateStudent(@PathVariable Long studentId, @ModelAttribute("student") Student student) {
+        student.setStudentId(studentId);
+        studentService.saveStudent(student);
+        return "redirect:/students";
+    }
 
+    @GetMapping("/{studentId}")
+    public String deleteStudent(@PathVariable Long studentId) {
+        studentService.deleteStudent(studentId);
+
+        return "redirect:/students";
+    }
 }

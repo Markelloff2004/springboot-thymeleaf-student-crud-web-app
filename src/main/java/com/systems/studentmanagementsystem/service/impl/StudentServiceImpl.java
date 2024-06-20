@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -23,7 +24,24 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student saveStudent(Student student) {
-        return studentRepository.save(student);
+    public void  saveStudent(Student student) {
+        studentRepository.save(student);
+    }
+
+    @Override
+    public void deleteStudent(Long studentId) {
+        studentRepository.delete(getStudentById(studentId));
+    }
+
+    @Override
+    public Student getStudentById(Long id) {
+        Optional<Student> optionalStudent = studentRepository.findById(id);
+        Student searchedStudent;
+        if (optionalStudent.isPresent()) {
+            searchedStudent = optionalStudent.get();
+        } else {
+            throw new RuntimeException("Employee not found");
+        }
+        return searchedStudent;
     }
 }
